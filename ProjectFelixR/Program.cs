@@ -1,10 +1,16 @@
+using Microsoft.EntityFrameworkCore;
 using ProjectFelixR.Components;
+using ProjectFelixR.Models;
+using ProjectFelixR.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddDbContext<ProjectDbContext>(c =>
+c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ITemplateService, TemplateService>();
 
 var app = builder.Build();
 

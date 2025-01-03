@@ -1,10 +1,80 @@
 ﻿@page "/templates"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject ProjectFelixR.Services.ITemplateService TemplateService
 
 <PageTitle>My templates</PageTitle>
 
 <h1>My templates</h1>
 
 
-@code {
+
+
+<h3>Template table</h3>
+
+@if (templates == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Topic</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var template in templates)
+            {
+                <tr>
+                    <td>@template.Id</td>
+                    <td>@template.Title</td>
+                    <td>@template.Description</td>
+                    <td>@template.TopicId</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" @onclick="() => NavigateToUpdate(template.Id)">Update</button>
+                        <button class="btn btn-danger btn-sm" @onclick="() => DeleteTemplate(template.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
 }
+
+<button class="btn btn-primary" @onclick="OpenAddTemplateModal">Add New Template</button>
+
+@code {
+    private List<Models.Template> templates;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load the template when the component is initialized
+        templates = await TemplateService.GetTemplates();
+
+    }
+
+    private void OpenAddTemplateModal()
+    {
+        Navigation.NavigateTo("/add-template");
+    }
+
+    private void NavigateToUpdate(int templateId)
+    {
+        Navigation.NavigateTo($"/update/{templateId}");
+    }
+
+    private async Task DeleteTemplate(int templateId)
+    {
+
+        await TemplateService.DeleteTemplate(templateId);
+
+        templates = await TemplateService.GetTemplates();
+    }
+}
+
