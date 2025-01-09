@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectFelixR.Models;
 
@@ -10,9 +11,11 @@ using ProjectFelixR.Models;
 namespace ProjectFelixR.Migrations
 {
     [DbContext(typeof(ProjectDbContext))]
-    partial class ProjectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250109054336_topicidchange")]
+    partial class topicidchange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,18 +48,6 @@ namespace ProjectFelixR.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<string>("custom_int1_question")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("custom_int2_question")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("custom_int3_question")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("custom_int4_question")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("custom_string1_question")
                         .HasColumnType("nvarchar(max)");
 
@@ -67,18 +58,6 @@ namespace ProjectFelixR.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("custom_string4_question")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("custom_text1_question")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("custom_text2_question")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("custom_text3_question")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("custom_text4_question")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

@@ -8,8 +8,6 @@
 <h1>My templates</h1>
 
 
-
-
 <h3>Template table</h3>
 
 @if (templates == null)
@@ -37,6 +35,7 @@ else
                     <td>@template.Description</td>
                     <td>@template.TopicId</td>
                     <td>
+                        <button class="btn btn-info btn-sm" @onclick="() => NavigateToSee(template.Id)">See</button>
                         <button class="btn btn-warning btn-sm" @onclick="() => NavigateToUpdate(template.Id)">Update</button>
                         <button class="btn btn-danger btn-sm" @onclick="() => DeleteTemplate(template.Id)">Delete</button>
                     </td>
@@ -63,7 +62,10 @@ else
     {
         Navigation.NavigateTo("/add-template");
     }
-
+    private void NavigateToSee(int templateId)
+    {
+        Navigation.NavigateTo($"/see-template/{templateId}");
+    }
     private void NavigateToUpdate(int templateId)
     {
         Navigation.NavigateTo($"/update/{templateId}");

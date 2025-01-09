@@ -1,7 +1,59 @@
 ﻿@page "/"
-
-<PageTitle>Home page</PageTitle>
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject ProjectFelixR.Services.ITemplateService TemplateService
 
 <h1>Popular templates:</h1>
 
 ......
+@if (templates == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ul class="template-cards">
+    @foreach (var template in templates)
+    {
+        <li @onclick="() => NavigateToSee(template.Id)" >
+            <div class="template-info">
+                <span class="title">@template.Title</span>
+                @template.Description
+                <span class="topic">@template.TopicId</span>
+            </div>
+        </li>
+    }
+    </ul>
+}
+
+@code {
+    private List<Models.Template> templates;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load the template when the component is initialized
+        templates = await TemplateService.GetTemplates();
+
+    }
+
+    private void OpenAddTemplateModal()
+    {
+        Navigation.NavigateTo("/add-template");
+    }
+    private void NavigateToSee(int templateId)
+    {
+        Navigation.NavigateTo($"/see-template/{templateId}");
+    }
+    private void NavigateToUpdate(int templateId)
+    {
+        Navigation.NavigateTo($"/update/{templateId}");
+    }
+
+    private async Task DeleteTemplate(int templateId)
+    {
+
+        await TemplateService.DeleteTemplate(templateId);
+
+        templates = await TemplateService.GetTemplates();
+    }
+}

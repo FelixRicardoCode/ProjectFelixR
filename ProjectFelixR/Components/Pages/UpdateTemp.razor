@@ -1,0 +1,130 @@
+﻿@page "/update/{templateId:int}"
+@rendermode InteractiveServer
+@using ProjectFelixR.Models
+@inject ProjectFelixR.Services.ITemplateService TemplateService
+@inject NavigationManager Navigation
+
+<h3>Update Template</h3>
+
+@if (template == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h4>General info</h4>
+    <div class="mb-3">
+        <label for="templateTitle" class="form-label">Title</label>
+        <input type="text" class="form-control" id="templateTitle" @bind="template.Title" @bind:event="oninput"/>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <input type="text" class="form-control" id="description" @bind="template.Description" />
+    </div>
+    <div class="mb-3">
+        <label for="topicId" class="form-label">Topic</label>
+        <select class="form-control" id="topicId" @bind="template.TopicId">
+            @foreach (var option in topicOptions)
+            {
+                <option value="@option">@option</option>
+            }
+        </select>
+    </div>
+    <h4>Questions</h4>
+    <div class="mb-3">
+        <label for="Question1" class="form-label">Question 1:</label>
+        <input type="text" class="form-control" id="Question1" @bind="template.custom_string1_question" @bind:event="oninput" />
+    </div>
+    <div class="mb-3">
+        <label for="Question2" class="form-label">Question 2:</label>
+        <input type="text" class="form-control" id="Question2" @bind="template.custom_string2_question" />
+    </div>
+    <div class="mb-3">
+        <label for="Question3" class="form-label">Question 3:</label>
+        <input type="text" class="form-control" id="Question3" @bind="template.custom_string3_question"/>
+    </div>
+    <div class="mb-3">
+        <label for="Question4" class="form-label">Question 4:</label>
+        <input type="text" class="form-control" id="Question4" @bind="template.custom_string4_question" />
+    </div>
+
+
+    <div class="mb-3">
+        <label for="Question1" class="form-label">Question 5:</label>
+        <input type="text" class="form-control" id="Question1" @bind="template.custom_text1_question" />
+    </div>
+    <div class="mb-3">
+        <label for="Question2" class="form-label">Question 6:</label>
+        <input type="text" class="form-control" id="Question2" @bind="template.custom_text2_question" />
+    </div>
+    <div class="mb-3">
+        <label for="Question3" class="form-label">Question 7:</label>
+        <input type="text" class="form-control" id="Question3" @bind="template.custom_text3_question" />
+    </div>
+    <div class="mb-3">
+        <label for="Question4" class="form-label">Question 8:</label>
+        <input type="text" class="form-control" id="Question4" @bind="template.custom_text4_question" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Question1" class="form-label">Question 9:</label>
+        <input type="text" class="form-control" id="Question1" @bind="template.custom_int1_question" />
+    </div>
+    <div class="mb-3">
+        <label for="Question2" class="form-label">Question 10:</label>
+        <input type="text" class="form-control" id="Question2" @bind="template.custom_int2_question" />
+    </div>
+    <div class="mb-3">
+        <label for="Question3" class="form-label">Question 11:</label>
+        <input type="text" class="form-control" id="Question3" @bind="template.custom_int3_question" />
+    </div>
+    <div class="mb-3">
+        <label for="Question4" class="form-label">Question 12:</label>
+        <input type="text" class="form-control" id="Question4" @bind="template.custom_int4_question" />
+    </div>
+
+
+
+
+
+    <button class="btn btn-secondary" @onclick="Cancel">Cancel</button>
+    <button class="btn btn-primary" @onclick="UpdateTemplate" disabled="@(IsFormValid())">Save</button>
+}
+
+@code {
+    [Parameter]
+    public int templateId { get; set; }
+    
+    private Models.Template template;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load the template to be updated
+        template = await TemplateService.GetTemplate(templateId);
+    }
+
+    private async Task UpdateTemplate()
+    {
+        // Update the template using the service
+        await TemplateService.UpdateTemplate(template);
+
+        // Redirect back to the template list page
+        Navigation.NavigateTo("/templates");
+    }
+
+    private void Cancel()
+    {
+        // Navigate back to the template list page
+        Navigation.NavigateTo("/templates");
+    }
+    
+    private bool IsFormValid()
+    {
+        return string.IsNullOrWhiteSpace(template.Title) && string.IsNullOrWhiteSpace(template.custom_string1_question) && string.IsNullOrWhiteSpace(template.TopicId);
+    }
+    private List<string> topicOptions = new List<string> {
+        "Biography", "Mathematics", "Biology", "History", "Geography", "Psychology",
+        "Literature", "Physics", "Chemistry","Philosophy","Arts","Computer Science", "Other" };
+}
+
+

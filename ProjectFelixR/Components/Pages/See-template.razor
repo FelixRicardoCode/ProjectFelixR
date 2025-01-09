@@ -1,0 +1,75 @@
+﻿@page "/see-template/{templateId:int}"
+@rendermode InteractiveServer
+@using ProjectFelixR.Models
+@inject ProjectFelixR.Services.ITemplateService TemplateService
+@inject NavigationManager Navigation
+
+<h3>Template</h3>
+
+@if (template == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h4>General info</h4>
+    <div class="mb-3">
+        <label for="templateTitle" class="form-label">Title:</label>
+        <input type="text" class="form-control" id="templateTitle" @bind="template.Title" readonly />
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <input type="text" class="form-control" id="description" @bind="template.Description" readonly />
+    </div>
+    <div class="mb-3">
+        <label for="topicId" class="form-label">Topic</label>
+        <input type="text" class="form-control" id="topicId" @bind="template.TopicId" readonly />
+    </div>
+    <h4>Questions</h4>
+    <div class="mb-3">
+        <label for="Question1" class="form-label">Question 1:</label>
+        <input type="text" class="form-control" id="Question1" @bind="template.custom_string1_question" readonly />
+    </div>
+    <div class="mb-3">
+        <label for="Question2" class="form-label">Question 2:</label>
+        <input type="text" class="form-control" id="Question2" @bind="template.custom_string2_question" readonly/>
+    </div>
+    <div class="mb-3">
+        <label for="Question3" class="form-label">Question 3:</label>
+        <input type="text" class="form-control" id="Question3" @bind="template.custom_string3_question" readonly/>
+    </div>
+    <div class="mb-3">
+        <label for="Question4" class="form-label">Question 4:</label>
+        <input type="text" class="form-control" id="Question4" @bind="template.custom_string4_question" readonly />
+    </div>
+
+
+
+
+    <button class="btn btn-secondary" @onclick="Cancel">Back</button>
+    <button class="btn btn-warning btn-sm" @onclick="() => NavigateToUpdate(template.Id)">Update</button>
+}
+
+@code {
+    [Parameter]
+    public int templateId { get; set; }
+
+    private Models.Template template;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Load the template to be updated
+        template = await TemplateService.GetTemplate(templateId);
+    }
+    private void NavigateToUpdate(int templateId)
+    {
+        Navigation.NavigateTo($"/update/{templateId}");
+    }
+    private void Cancel()
+    {
+        // Navigate back to the template list page
+        Navigation.NavigateTo("/templates");
+    }
+   
+    
+}
